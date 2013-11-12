@@ -386,12 +386,11 @@ class ProtocolHandler(object):
         if key is None:
             return False
 
-        path = key
+    	key = quote(key.encode('UTF-8'))
         if db:
-            path = '/%s/%s' % (db, key)
-        path = quote(path.encode('UTF-8'))
+            key = '/%s/%s' % (quote(db), key)
 
-        self.conn.request('GET', path)
+        self.conn.request('GET', key)
         res, body = self.getresponse()
 
         if res.status == 404:
@@ -518,12 +517,11 @@ class ProtocolHandler(object):
             self.err.set_error(self.err.LOGIC)
             return False
 
-        path = key
+        key = quote(key.encode('UTF-8'))
         if db:
-            path = '/%s/%s' % (db, key)
-        path = quote(path.encode('UTF-8'))
+            key = '/%s/%s' % (quote(db), key)
 
-        self.conn.request('GET', path)
+        self.conn.request('GET', key)
 
         res, body = self.getresponse()
         if res.status != 200:
@@ -630,9 +628,9 @@ class ProtocolHandler(object):
             self.err.set_error(self.err.LOGIC)
             return False
 
-        if db:
-            key = '/%s/%s' % (db, key)
         key = quote(key.encode('UTF-8'))
+        if db:
+            key = '/%s/%s' % (quote(db), key)
         value = self.pack(value)
 
         self.err.set_success()
@@ -650,10 +648,10 @@ class ProtocolHandler(object):
             self.err.set_error(self.err.LOGIC)
             return False
 
-        if db:
-            key = '/%s/%s' % (db, key)
-
         key = quote(key.encode('UTF-8'))
+        if db:
+            key = '/%s/%s' % (quote(db), key)
+
         value = self.pack(value)
         status = self._rest_put('add', key, value, expire)
 
@@ -700,10 +698,10 @@ class ProtocolHandler(object):
             self.err.set_error(self.err.LOGIC)
             return False
 
-        if db:
-            key = '/%s/%s' % (db, key)
-
         key = quote(key.encode('UTF-8'))
+        if db:
+            key = '/%s/%s' % (quote(db), key)
+
         self.conn.request('DELETE', key)
 
         res, body = self.getresponse()
@@ -719,10 +717,10 @@ class ProtocolHandler(object):
             self.err.set_error(self.err.LOGIC)
             return False
 
-        if db:
-            key = '/%s/%s' % (db, key)
-
         key = quote(key.encode('UTF-8'))
+        if db:
+            key = '/%s/%s' % (quote(db), key)
+
         value = self.pack(value)
         status = self._rest_put('replace', key, value, expire)
 
